@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+        <h2>{{ project.name }}</h2>
+        <p style="color:#666;">{{ project.description }}</p>
+    </div>
+    <a href="{{ url_for('new_task', project_id=project.id) }}" class="btn btn-success">+ New Task</a>
+</div>
+
+<h3 style="margin-top:30px;">Tasks</h3>
+{% if tasks %}
+{% for task in tasks %}
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <h4>{{ task.title }}</h4>
+            <p style="color:#666;">{{ task.description }}</p>
+            {% if task.due_date %}
+            <p style="color:#e74c3c;font-size:13px;">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <span class="badge badge-{{ task.status }}">{{ task.status }}</span>
+            <form method="POST" action="{{ url_for('update_task', task_id=task.id) }}" style="display:inline;margin-left:10px;">
+                <select name="status" onchange="this.form.submit()">
+                    <option value="todo" {% if task.status=='todo' %}selected{% endif %}>Todo</option>
+                    <option value="inprogress" {% if task.status=='inprogress' %}selected{% endif %}>In Progress</option>
+                    <option value="done" {% if task.status=='done' %}selected{% endif %}>Done</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <p style="color:#666;">No tasks yet. Create your first task!</p>
+</div>
+{% endif %}
+<p style="margin-top:15px;"><a href="{{ url_for('index') }}">← Back to Home</a></p>
+{% endblock %}

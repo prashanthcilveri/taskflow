@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <h2>Welcome, {{ current_user.username }}! 👋</h2>
+    <a href="{{ url_for('new_project') }}" class="btn btn-primary">+ New Project</a>
+</div>
+
+<h3 style="margin-top:30px;">Your Projects</h3>
+{% if projects %}
+{% for project in projects %}
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <h4>{{ project.name }}</h4>
+            <p style="color:#666;margin-top:5px;">{{ project.description }}</p>
+        </div>
+        <a href="{{ url_for('view_project', project_id=project.id) }}" class="btn btn-primary">View</a>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <p style="color:#666;">No projects yet. Create your first project!</p>
+</div>
+{% endif %}
+
+<h3 style="margin-top:30px;">Your Tasks</h3>
+{% if tasks %}
+{% for task in tasks %}
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <h4>{{ task.title }}</h4>
+            <p style="color:#666;">{{ task.description }}</p>
+        </div>
+        <span class="badge badge-{{ task.status }}">{{ task.status }}</span>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <p style="color:#666;">No tasks assigned to you yet.</p>
+</div>
+{% endif %}
+{% endblock %}

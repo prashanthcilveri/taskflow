@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="margin-bottom:20px;">📊 Dashboard</h2>
+
+<div style="display:flex;gap:20px;flex-wrap:wrap;">
+    <div class="card" style="flex:1;min-width:200px;text-align:center;">
+        <h1 style="color:#3498db;font-size:48px;">{{ total_tasks }}</h1>
+        <p style="color:#666;">Total Tasks</p>
+    </div>
+    <div class="card" style="flex:1;min-width:200px;text-align:center;">
+        <h1 style="color:#2ecc71;font-size:48px;">{{ done_tasks }}</h1>
+        <p style="color:#666;">Completed Tasks</p>
+    </div>
+    <div class="card" style="flex:1;min-width:200px;text-align:center;">
+        <h1 style="color:#e74c3c;font-size:48px;">{{ overdue_tasks|length }}</h1>
+        <p style="color:#666;">Overdue Tasks</p>
+    </div>
+    <div class="card" style="flex:1;min-width:200px;text-align:center;">
+        <h1 style="color:#9b59b6;font-size:48px;">{{ projects|length }}</h1>
+        <p style="color:#666;">Total Projects</p>
+    </div>
+</div>
+
+{% if overdue_tasks %}
+<h3 style="margin-top:30px;color:#e74c3c;">⚠️ Overdue Tasks</h3>
+{% for task in overdue_tasks %}
+<div class="card" style="border-left:4px solid #e74c3c;">
+    <h4>{{ task.title }}</h4>
+    <p style="color:#e74c3c;">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
+<h3 style="margin-top:30px;">Your Projects</h3>
+{% for project in projects %}
+<div class="card">
+    <div style="display:flex;justify-content:space-between;">
+        <h4>{{ project.name }}</h4>
+        <a href="{{ url_for('view_project', project_id=project.id) }}" class="btn btn-primary">View</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
