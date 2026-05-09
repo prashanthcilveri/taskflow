@@ -143,8 +143,8 @@ def dashboard():
     overdue_tasks = Task.query.filter(Task.assigned_to==current_user.id, Task.due_date < datetime.utcnow(), Task.status != 'done').all()
     projects = Project.query.filter_by(owner_id=current_user.id).all()
     return render_template('dashboard.html', total_tasks=total_tasks, done_tasks=done_tasks, overdue_tasks=overdue_tasks, projects=projects)
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
